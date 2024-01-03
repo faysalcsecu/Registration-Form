@@ -12,7 +12,7 @@ include("database.php");
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: blanchedalmond;
+            background-color: darkslateblue;
             margin: 0;
             padding: 0;
             display: flex;
@@ -23,7 +23,7 @@ include("database.php");
 
         .container {
             background-color: #fff;
-            padding: 30px;
+            padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
@@ -37,7 +37,7 @@ include("database.php");
         label,
         input {
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 10px;
         }
 
         input[type="text"],
@@ -46,7 +46,7 @@ include("database.php");
             width: calc(100% - 22px);
             padding: 8px;
             border: 1px solid #ccc;
-            border-radius: 8px;
+            border-radius: 3px;
         }
 
         input[type="submit"] {
@@ -61,8 +61,6 @@ include("database.php");
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
-
-
 
         .error {
             color: red;
@@ -80,10 +78,6 @@ include("database.php");
             text-align: center;
             margin-top: 15px;
         }
-
-        .delete-button {
-            color: red;
-        }
     </style>
 </head>
 
@@ -92,13 +86,11 @@ include("database.php");
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <h2>Welcome to Youtube</h2>
             <label for="">Username:</label> <br>
-            <input type="text" class="abc" name="username"><br>
+            <input type="text" name="username"><br>
             <label for="">Password:</label> <br>
             <input type="password" name="password"><br>
-            <label>Age:</label><br>
-            <input type="text" name="age"><br> <!-- Added age input field -->
             <input type="submit" name="submit" value="register"><br>
-            <!-- Button for redirecting to delete and update form pages -->
+            <!-- Button for redirecting to delete form page -->
             <a href="delete_form.php" class="delete-button">Delete User</a><br>
             <a href="update_form.php" class="update-button">Update User</a>
         </form>
@@ -107,17 +99,13 @@ include("database.php");
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_SPECIAL_CHARS);
                 $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_SPECIAL_CHARS);
-                $age = filter_input(INPUT_POST, "age", FILTER_VALIDATE_INT);
-
                 if (empty($username)) {
                     echo "<div class='error'>Please enter a username</div>";
                 } else if (empty($password)) {
                     echo "<div class='error'>Please enter a password</div>";
-                } else if ($age === false || $age === null) {
-                    echo "<div class='error'>Please enter a valid age</div>";
                 } else {
                     $hash = password_hash($password, PASSWORD_DEFAULT);
-                    $sql = "INSERT INTO users (username, password, age) VALUES ('$username', '$hash', '$age')";
+                    $sql = "INSERT INTO users (username, password) VALUES ('$username', '$hash')";
                     try {
                         if (mysqli_query($conn, $sql)) {
                             echo "<div class='success'>You are now registered!</div>";
@@ -132,6 +120,7 @@ include("database.php");
             mysqli_close($conn);
             ?>
         </div>
+
     </div>
 </body>
 
